@@ -1,8 +1,8 @@
-This project aims to create a simple task manager web app using Next.JS.
+**This project aims to create a simple task manager web app using Next.JS.**
 
 The required features are:
 
-1. Add a new task
+1. ~~Add a new task~~
 2. Mark a task as completed
 3. Delete a task
 4. Filter tasks by status (all, active, completed)
