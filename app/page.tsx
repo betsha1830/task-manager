@@ -22,6 +22,20 @@ export default function Home() {
     setCurrentInput(e.target.value)
   }
 
+  //  Changes the tasks status as completed or active
+  function changeStatus(id: number) {
+    const temp = [{ id: 0, task: "", completed: false }]
+    storage.map((c, i) => {
+      if (i === 0) return // Remove the inital task that was used for data type mapping
+      if (c.id === id) {
+        temp.push({ id: id, task: c.task, completed: !c.completed })
+      } else {
+        return temp.push(c)
+      }
+    })
+    setStorage(temp)
+  }
+
   return (
     <div className="parent-container">
       <input
@@ -37,7 +51,17 @@ export default function Home() {
           if (i === 0) return // Remove the inital task that was used for data type mapping
           return (
             <div key={c.id}>
-              {c.id}. {c.task} <br />
+              {c.id}. {c.task}{" "}
+              <button
+                onClick={(e) => changeStatus(c.id)}
+                title={
+                  c.completed === false ? "Mark as completed" : "Mark as active"
+                }
+              >
+                {" "}
+                {c.completed === false ? "❌" : "✔️"}
+              </button>{" "}
+              <br />
             </div>
           )
         })}

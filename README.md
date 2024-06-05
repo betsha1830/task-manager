@@ -3,7 +3,7 @@
 The required features are:
 
 1. ~~Add a new task~~
-2. Mark a task as completed
+2. ~~Mark a task as completed~~
 3. Delete a task
 4. Filter tasks by status (all, active, completed)
 5. Add local storage support to persist tasks across page reloads.
