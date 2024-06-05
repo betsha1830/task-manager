@@ -36,6 +36,18 @@ export default function Home() {
     setStorage(temp)
   }
 
+  //	Deletes a task
+  function deleteTask(id: number) {
+    let temp = storage.slice(0, id)
+    // setStorage(storage.filter((i) => id !== i.id))
+    storage.map((i) => {
+      if (i.id <= id) return
+      setId(i.id) //	Assigns a new id value for an order list
+      temp.push({ id: i.id - 1, task: i.task, completed: i.completed })
+    })
+    setStorage(temp)
+  }
+
   return (
     <div className="parent-container">
       <input
@@ -61,6 +73,9 @@ export default function Home() {
                 {" "}
                 {c.completed === false ? "❌" : "✔️"}
               </button>{" "}
+              <button title="Delete task" onClick={() => deleteTask(c.id)}>
+                🗑️
+              </button>
               <br />
             </div>
           )
