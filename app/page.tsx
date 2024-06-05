@@ -1,16 +1,31 @@
 "use client"
 
-import { tree } from "next/dist/build/templates/app-page"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ChangeEvent } from "react"
 
 export default function Home() {
-  const [id, setId] = useState(1)
+  const [id, setId] = useState(0)
   const initialTask = [{ id: id, task: "", completed: false }]
 
   const [output, setOutput] = useState(initialTask)
   const [storage, setStorage] = useState(initialTask)
   const [currentInput, setCurrentInput] = useState("")
+
+  // Checks if there is any saved local data
+  useEffect(() => {
+    const temp = localStorage.getItem("storage") //	Fetches item from local storage
+    if (temp === null) {
+      //	Checks if local storage is empty. If empty increases id by 1 else assigns the value to storage and output state
+      setId(id + 1)
+      return
+    }
+    let arr = JSON.parse(temp)
+    setStorage(arr)
+    setOutput(arr)
+    arr.map((i) => {
+      setId(i.id + 1)
+    })
+  }, [])
 
   //  Adds a task to the list
   function addTask() {
@@ -18,6 +33,7 @@ export default function Home() {
     const i = [...storage, { id: id, task: currentInput, completed: false }]
     setStorage(i)
     setOutput(i)
+    localStorage.setItem("storage", JSON.stringify(i))
   }
 
   //  Listens to text input change
@@ -38,6 +54,7 @@ export default function Home() {
     })
     setStorage(temp)
     setOutput(temp)
+    localStorage.setItem("storage", JSON.stringify(temp))
   }
 
   //	Deletes a task
@@ -50,6 +67,7 @@ export default function Home() {
     })
     setStorage(temp)
     setOutput(temp)
+    localStorage.setItem("storage", JSON.stringify(temp))
   }
 
   //	Filters tasks based on its status
