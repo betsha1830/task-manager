@@ -6,7 +6,6 @@ import { ChangeEvent } from "react"
 export default function Home() {
   const [id, setId] = useState(0)
   const initialTask = [{ id: id, task: "", completed: false }]
-  const [isChecked, setIsChecked] = useState(false)
   const [output, setOutput] = useState(initialTask)
   const [storage, setStorage] = useState(initialTask)
   const [currentInput, setCurrentInput] = useState("")
@@ -22,9 +21,7 @@ export default function Home() {
     let arr = JSON.parse(temp)
     setStorage(arr)
     setOutput(arr)
-    arr.map((i) => {
-      setId(i.id + 1)
-    })
+    setId(arr.length)
   }, [])
 
   //  Adds a task to the list
