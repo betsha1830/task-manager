@@ -6,7 +6,7 @@ import { ChangeEvent } from "react"
 export default function Home() {
   const [id, setId] = useState(0)
   const initialTask = [{ id: id, task: "", completed: false }]
-
+  const [isChecked, setIsChecked] = useState(false)
   const [output, setOutput] = useState(initialTask)
   const [storage, setStorage] = useState(initialTask)
   const [currentInput, setCurrentInput] = useState("")
@@ -14,7 +14,7 @@ export default function Home() {
   // Checks if there is any saved local data
   useEffect(() => {
     const temp = localStorage.getItem("storage") //	Fetches item from local storage
-    if (temp === null) {
+    if (temp === null || temp.length === 0) {
       //	Checks if local storage is empty. If empty increases id by 1 else assigns the value to storage and output state
       setId(id + 1)
       return
@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   //  Changes the tasks status as completed or active
-  function changeStatus(id: number) {
+  function isCompleted(isChecked: boolean, id: number) {
     const temp = [{ id: 0, task: "", completed: false }]
     storage.map((c, i) => {
       if (i === 0) return // Remove the inital task that was used for data type mapping
@@ -62,9 +62,9 @@ export default function Home() {
     let temp = storage.slice(0, id)
     storage.map((i) => {
       if (i.id <= id) return
-      setId(i.id) //	Assigns a new id value for an order list
       temp.push({ id: i.id - 1, task: i.task, completed: i.completed })
     })
+    setId(temp.length)
     setStorage(temp)
     setOutput(temp)
     localStorage.setItem("storage", JSON.stringify(temp))
@@ -80,7 +80,6 @@ export default function Home() {
           temp.push({ id: i.id, task: i.task, completed: i.completed })
         }
       })
-      setOutput(temp)
     } else if (filter === "active") {
       //	Filters tasks that are still active
       storage.map((i) => {
@@ -88,15 +87,18 @@ export default function Home() {
           temp.push({ id: i.id, task: i.task, completed: i.completed })
         }
       })
-      setOutput(temp)
-    } else if (filter === "all") {
+    } else {
       //	Lists all tasks
-      setOutput(storage)
+      temp = storage
     }
+    setOutput(temp)
   }
 
   return (
     <div className="parent-container">
+      <div>
+        <h1 className="text-center text-4xl font-bold">Todist</h1>
+      </div>
       <input
         onChange={(e) => listenChange(e)}
         className="border-2 border-solid border-gray-400"
@@ -106,37 +108,51 @@ export default function Home() {
         Add task
       </button>
       Filter:{" "}
-      <select className=" w-48">
+      <select
+        onChange={(e) => filterTasks(e.target.value)}
+        size={1}
+        className=" w-48"
+      >
         <option value="">Choose an option</option>
-        <option onClick={() => filterTasks("all")} value={"all"}>
-          All
-        </option>
-        <option onClick={() => filterTasks("completed")} value="completed">
-          Completed
-        </option>
-        <option onClick={() => filterTasks("active")} value="active">
-          Active
-        </option>
+        <option value="all">All</option>
+        <option value="completed">Completed</option>
+        <option value="active">Active</option>
       </select>
       <div>
         {output.map((c, i) => {
           if (c.id === 0) return // Remove the inital task that was used for data type mapping
           return (
-            <div key={c.id}>
-              {c.id}. {c.task}{" "}
-              <button
-                onClick={(e) => changeStatus(c.id)}
-                title={
-                  c.completed === false ? "Mark as completed" : "Mark as active"
+            <div className="flex" key={c.id}>
+              <input
+                type="checkbox"
+                onChange={(e) => {
+                  isCompleted(e.target.checked, c.id)
+                }}
+                checked={c.completed}
+              />{" "}
+              &nbsp;&nbsp;
+              <div
+                className={
+                  c.completed ? "line-through text-gray-400" : "text-black"
                 }
               >
-                {" "}
-                {c.completed === false ? "❌" : "✔️"}
-              </button>{" "}
-              <button title="Delete task" onClick={() => deleteTask(c.id)}>
-                🗑️
-              </button>
-              <br />
+                {c.id}. {c.task}{" "}
+                {/* <button
+                  onClick={(e) => changeStatus(c.id)}
+                  title={
+                    c.completed === false
+                      ? "Mark as completed"
+                      : "Mark as active"
+                  }
+                >
+                  {" "}
+                  {c.completed === false ? "❌" : "✔️"}
+                </button>{" "} */}
+                <button title="Delete task" onClick={() => deleteTask(c.id)}>
+                  🗑️
+                </button>
+                <br />
+              </div>
             </div>
           )
         })}
