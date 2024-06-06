@@ -95,35 +95,40 @@ export default function Home() {
   }
 
   return (
-    <div className="parent-container">
+    <div className="parent-container text-lg flex flex-col items-center gap-y-4">
       <div>
-        <h1 className="text-center text-4xl font-bold">Todist</h1>
+        <h1 className="text-4xl font-bold">Todist</h1>
       </div>
-      <input
-        onChange={(e) => listenChange(e)}
-        className="border-2 border-solid border-gray-400"
-        type="text"
-      />
-      <button className="border-2 border-black p-2" onClick={addTask}>
-        Add task
-      </button>
-      Filter:{" "}
-      <select
-        onChange={(e) => filterTasks(e.target.value)}
-        size={1}
-        className=" w-48"
-      >
-        <option value="">Choose an option</option>
-        <option value="all">All</option>
-        <option value="completed">Completed</option>
-        <option value="active">Active</option>
-      </select>
-      <div>
+      <div className="add-task flex gap-x-4">
+        <input
+          onChange={(e) => listenChange(e)}
+          className="rounded-md h-10"
+          type="text"
+        />
+        <button className="bg-white rounded-md px-2 h-10" onClick={addTask}>
+          Add task
+        </button>
+      </div>
+      <div className="filter flex gap-x-4">
+        Filter:{" "}
+        <select
+          onChange={(e) => filterTasks(e.target.value)}
+          size={1}
+          className="px-3 rounded h-10"
+        >
+          <option value="">Choose an option</option>
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="active">Active</option>
+        </select>
+      </div>
+      <div className="border-2 min-w-64 max-w-96 py-2 px-4">
         {output.map((c, i) => {
           if (c.id === 0) return // Remove the inital task that was used for data type mapping
           return (
-            <div className="flex" key={c.id}>
+            <div className="flex items-center" key={c.id}>
               <input
+                className="w-5 h-5"
                 type="checkbox"
                 onChange={(e) => {
                   isCompleted(e.target.checked, c.id)
@@ -131,27 +136,19 @@ export default function Home() {
                 checked={c.completed}
               />{" "}
               &nbsp;&nbsp;
-              <div
-                className={
-                  c.completed ? "line-through text-gray-400" : "text-black"
-                }
-              >
-                {c.id}. {c.task}{" "}
-                {/* <button
-                  onClick={(e) => changeStatus(c.id)}
-                  title={
-                    c.completed === false
-                      ? "Mark as completed"
-                      : "Mark as active"
+              <div className="flex w-full justify-between">
+                <div
+                  className={
+                    c.completed
+                      ? "line-through text-gray-400 mx-1  mb-2"
+                      : "text-black mx-1 mb-2"
                   }
                 >
-                  {" "}
-                  {c.completed === false ? "❌" : "✔️"}
-                </button>{" "} */}
+                  {c.id}. {c.task}{" "}
+                </div>{" "}
                 <button title="Delete task" onClick={() => deleteTask(c.id)}>
                   🗑️
                 </button>
-                <br />
               </div>
             </div>
           )
