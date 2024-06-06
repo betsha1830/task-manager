@@ -34,6 +34,8 @@ export default function Home() {
     setStorage(i)
     setOutput(i)
     localStorage.setItem("storage", JSON.stringify(i))
+    const taskInput = document.getElementById("task-input") as HTMLInputElement
+    taskInput.value = ""
   }
 
   //  Listens to text input change
@@ -99,13 +101,19 @@ export default function Home() {
       <div>
         <h1 className="text-4xl font-bold">Todist</h1>
       </div>
-      <div className="add-task flex gap-x-4">
+      <div className="add-task flex justify-center lg:justify-start gap-x-4 flex-wrap gap-y-4">
         <input
           onChange={(e) => listenChange(e)}
           className="rounded-md h-10"
           type="text"
+          id="task-input"
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              addTask()
+            }
+          }}
         />
-        <button className="bg-white rounded-md px-2 h-10" onClick={addTask}>
+        <button className="bg-white rounded-md px-2 min-h-10" onClick={addTask}>
           Add task
         </button>
       </div>
