@@ -9,7 +9,7 @@ The required features are:
 3. ~~Delete a task~~
 4. ~~Filter tasks by status (all, active, completed)~~
 5. ~~Add local storage support to persist tasks across page reloads~~
-6. Implement basic unit tests for key components/functions.
+6. ~~Implement basic unit tests for key components/functions.~~
 
 ## How to run the project
 
