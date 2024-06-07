@@ -35,11 +35,6 @@ export default function Home() {
     taskInput.value = ""
   }
 
-  //  Listens to text input change
-  function listenChange(e: ChangeEvent<HTMLInputElement>) {
-    setCurrentInput(e.target.value)
-  }
-
   //  Changes the tasks status as completed or active
   function isCompleted(isChecked: boolean, id: number) {
     const temp = [{ id: 0, task: "", completed: false }]
@@ -98,10 +93,11 @@ export default function Home() {
       <div>
         <h1 className="text-4xl font-bold">Todist</h1>
       </div>
+      {/* Input field to add tasks in to task list */}
       <div className="add-task flex justify-center lg:justify-start gap-x-4 flex-wrap gap-y-4">
         <input
           placeholder="Get some milk"
-          onChange={(e) => listenChange(e)}
+          onChange={(e) => setCurrentInput(e.target.value)}
           className="rounded-md h-10 px-2"
           type="text"
           id="task-input"
@@ -115,9 +111,11 @@ export default function Home() {
           Add task
         </button>
       </div>
+      {/* Dropbox for filtering tasks by completed, active or all */}
       <div className="filter flex gap-x-4 flex-wrap">
         Filter:{" "}
         <select
+          title="select filter"
           onChange={(e) => filterTasks(e.target.value)}
           size={1}
           className="px-3 rounded h-10"
@@ -128,6 +126,7 @@ export default function Home() {
           <option value="active">Active</option>
         </select>
       </div>
+      {/* Tasks will be printed here from task list */}
       <div className="border-2 min-w-64 max-w-96 py-2 px-4">
         {output.map((c, i) => {
           if (c.id === 0) return // Remove the inital task that was used for data type mapping

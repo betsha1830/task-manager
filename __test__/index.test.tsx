@@ -16,7 +16,6 @@ describe("Home component", () => {
     const taskInput = screen.getByRole("textbox")
     const addButton = screen.getByText("Add task")
 
-    // Simulate entering a task and adding it
     fireEvent.change(taskInput, { target: { value: "Test task" } })
     fireEvent.click(addButton)
 
@@ -41,14 +40,11 @@ describe("Home component", () => {
     const taskInput = screen.getByRole("textbox")
     const addButton = screen.getByText("Add task")
 
-    // Simulate adding a task
     fireEvent.change(taskInput, { target: { value: "Test Task" } })
     fireEvent.click(addButton)
 
-    // Get the delete button for the task
     const deleteButton = screen.getByTitle("Delete task")
 
-    // Simulate deleting the task
     fireEvent.click(deleteButton)
 
     // Check that task was removed from the document
@@ -65,5 +61,34 @@ describe("Home component", () => {
         task: "",
       },
     ])
+  })
+
+  //  Tests filterTasks function to filter task if completed, active or all
+  test("filterTasks function should filter tasks based on their status", () => {
+    localStorage.setItem(
+      "storage",
+      JSON.stringify([
+        { id: 1, task: "Active Task", completed: false },
+        { id: 2, task: "Completed Task", completed: true },
+      ])
+    )
+    render(<Home />)
+
+    const filterSelect = screen.getByTitle("select filter")
+
+    // Filter completed tasks
+    fireEvent.change(filterSelect, { target: { value: "completed" } })
+    expect(screen.queryByText("1. Active Task")).not.toBeInTheDocument()
+    expect(screen.queryByText("2. Completed Task")).toBeInTheDocument()
+
+    // Filter active tasks
+    fireEvent.change(filterSelect, { target: { value: "active" } })
+    expect(screen.queryByText("1. Active Task")).toBeInTheDocument()
+    expect(screen.queryByText("2. Completed Task")).not.toBeInTheDocument()
+
+    // Show all tasks
+    fireEvent.change(filterSelect, { target: { value: "all" } })
+    expect(screen.queryByText("1. Active Task")).toBeInTheDocument()
+    expect(screen.queryByText("2. Completed Task")).toBeInTheDocument()
   })
 })
