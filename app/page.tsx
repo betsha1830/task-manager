@@ -4,11 +4,11 @@ import { useEffect, useState } from "react"
 import { ChangeEvent } from "react"
 
 export default function Home() {
-  const [id, setId] = useState(0)
-  const initialTask = [{ id: id, task: "", completed: false }]
-  const [output, setOutput] = useState(initialTask)
-  const [storage, setStorage] = useState(initialTask)
-  const [currentInput, setCurrentInput] = useState("")
+  const [id, setId] = useState(0) //  Used to track the list as an order list
+  const initialTask = [{ id: id, task: "", completed: false }] //  Used for data type mapping
+  const [output, setOutput] = useState(initialTask) //  Used to manipulate the original data for filtering and outputting
+  const [storage, setStorage] = useState(initialTask) //  Original data that will be store in local storage
+  const [currentInput, setCurrentInput] = useState("") //  Used to fetch the input data from user
 
   // Checks if there is any saved local data
   useEffect(() => {
@@ -100,8 +100,9 @@ export default function Home() {
       </div>
       <div className="add-task flex justify-center lg:justify-start gap-x-4 flex-wrap gap-y-4">
         <input
+          placeholder="Get some milk"
           onChange={(e) => listenChange(e)}
-          className="rounded-md h-10"
+          className="rounded-md h-10 px-2"
           type="text"
           id="task-input"
           onKeyDown={(e) => {
@@ -114,7 +115,7 @@ export default function Home() {
           Add task
         </button>
       </div>
-      <div className="filter flex gap-x-4">
+      <div className="filter flex gap-x-4 flex-wrap">
         Filter:{" "}
         <select
           onChange={(e) => filterTasks(e.target.value)}
