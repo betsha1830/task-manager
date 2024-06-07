@@ -36,3 +36,9 @@ and run the production build using
 ```
 pnpm run start
 ```
+
+## How to run a test
+
+```
+pnpm test
+```
